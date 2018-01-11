@@ -1,6 +1,6 @@
 {
   "name": "react-router-ez-loader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Make your application's react routes code is more ez! :smile:",
   "main": "index.js",
   "scripts": {
