@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test 1`] = `
+"/**
+ * @file: routes
+ * @author: Cuttle Cong
+ * @date: 2018/1/11
+ * @description:
+ */
+
+module.exports = {
+  path: '/',
+  component: require(\\"./App\\").default || require(\\"./App\\"),
+  indexRoute: {
+    getComponent: function getComponent(location, callback) {
+      require.ensure([], function () {
+        callback(null, require(\\"@IndexPage\\").default || require(\\"@IndexPage\\"));
+      }, \\"@IndexPage\\");
+    }
+  },
+  childRoutes: [{
+    path: 'edit',
+    getComponent: function getComponent(location, callback) {
+      require.ensure([], function () {
+        callback(null, require(\\"!some-loader!../../Edit\\\\\\"Page\\").default || require(\\"!some-loader!../../Edit\\\\\\"Page\\"));
+      }, \\"Edit\\\\\\"Page\\");
+    }
+  }, {
+    path: 'view',
+    getComponent: function getComponent(location, callback) {
+      require.ensure([], function () {
+        callback(null, require(\\"!some-loader!../../ViewPage?n=View\\").default || require(\\"!some-loader!../../ViewPage?n=View\\"));
+      }, \\"View\\");
+    }
+  }]
+};"
+`;
