@@ -19,6 +19,8 @@ var corePlugin = {
       ) {
         var requestString = value.node.value || ''
         requestString = requestString.trim()
+        var query = parseQuery(requestString)
+        requestString = removeQuery(requestString)
         var result
         requestString = requestString.replace(/^(.*?!)?/, function (m) {
           if (m === 'sync!') {
@@ -28,7 +30,7 @@ var corePlugin = {
           return m
         })
         var requireCode = 'require(' + JSON.stringify(requestString) + ')'
-        requireCode = requireCode + '.default || ' + requireCode
+        requireCode = query.export ? requireCode + '.' + query.export : requireCode +  '.default || ' + requireCode
         // has result, must === 'sync!'
         if (result) {
           value.replaceWithSourceString(
@@ -41,7 +43,7 @@ var corePlugin = {
             'function getComponent(location, callback) {\n' +
             '  require.ensure([], function () {\n' +
             '    callback(null, ' + requireCode + ')\n' +
-            '  }, ' + JSON.stringify(stripeLoaderString(requestString)) +')\n' +
+            '  }, ' + JSON.stringify(query.name || parseChunkname(requestString)) +')\n' +
             '}'
           )
         }
@@ -51,8 +53,35 @@ var corePlugin = {
 }
 
 function stripeLoaderString(string = '') {
-  const arr = string.split('!')
+  var arr = string.split('!')
   return arr[arr.length - 1]
+}
+
+function parseQuery(str) {
+  var compStart = str.lastIndexOf('!') === -1 ? 0 : str.lastIndexOf('!')
+  var compStr = str.substr(compStart - str.length)
+  var startPoint = compStr.lastIndexOf('?')
+  var query = {};
+  if (startPoint > 0) {
+    compStr.substr(startPoint - compStr.length + 1).split('&').forEach(function(pair) {
+      pair = pair.split('=')
+      query[pair[0]] = pair[1]
+    })
+  }
+  return query
+}
+
+function parseChunkname(relUrl) {
+  var matches = relUrl.match(/([^\/\.?]+)\?*[^\/*]*$/)
+  return matches && matches[1]
+}
+
+function removeQuery(str) {
+  if (str.lastIndexOf('?') > str.lastIndexOf('!')) {
+    return str.substring(0, str.lastIndexOf('?'))
+  }
+
+  return str
 }
 
 module.exports = function (content) {
