@@ -14,7 +14,7 @@ module.exports = {
   childRoutes: [
     {
       path: 'edit',
-      component: '!some-loader!../../EditPage'
+      component: '!some-loader!../../Edit"Page'
     },
     {
       path: 'view',

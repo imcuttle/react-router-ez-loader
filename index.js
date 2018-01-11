@@ -6,12 +6,11 @@
  */
 var babel = require('babel-core')
 var qs = require('querystring')
-// var generate = require('babel-generator').default
 var t = babel.types
 
 var corePlugin = {
   visitor: {
-    ObjectProperty(path) {
+    ObjectProperty: function(path) {
       var keyPath = path.get('key')
       var value = path.get('value')
       if (
