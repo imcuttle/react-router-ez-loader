@@ -5,7 +5,8 @@
  * @description:
  */
 var babel = require('babel-core')
-var generate = require('babel-generator').default
+var qs = require('querystring')
+// var generate = require('babel-generator').default
 var t = babel.types
 
 var corePlugin = {
@@ -29,6 +30,8 @@ var corePlugin = {
         })
         var requireCode = 'require(' + JSON.stringify(requestString) + ')'
         requireCode = requireCode + '.default || ' + requireCode
+
+        var chunkname = calcChunkname(requestString)
         // has result, must === 'sync!'
         if (result) {
           value.replaceWithSourceString(
@@ -41,7 +44,7 @@ var corePlugin = {
             'function getComponent(location, callback) {\n' +
             '  require.ensure([], function () {\n' +
             '    callback(null, ' + requireCode + ')\n' +
-            '  }, ' + JSON.stringify(stripeLoaderString(requestString)) +')\n' +
+            '  }, ' + JSON.stringify(chunkname) +')\n' +
             '}'
           )
         }
@@ -50,8 +53,38 @@ var corePlugin = {
   }
 }
 
+/**
+ * case 1:
+ *  in: 'react'
+ *  out: 'react'
+ * case 2:
+ *  in: './../react',
+ *  out: 'react'
+ * case 3:
+ *  in: './../react?n=aliasName'
+ *  out: 'aliasName'
+ * case 4:
+ *  in: '!some-loader!./../react'
+ *  out: 'react'
+ */
+function calcChunkname(requestString) {
+  requestString = requestString.trim()
+  var qIndex = requestString.lastIndexOf('?')
+  if (qIndex >= 0) {
+    var name = qs.parse(requestString.slice(qIndex + 1)).n
+    if (typeof name !== 'undefined') {
+      return name
+    }
+
+    requestString = requestString.slice(0, qIndex)
+  }
+  requestString = stripeLoaderString(requestString)
+
+  return requestString.replace(/^(\.\/|\.\.\/)+/, '')
+}
+
 function stripeLoaderString(string = '') {
-  const arr = string.split('!')
+  var arr = string.split('!')
   return arr[arr.length - 1]
 }
 
@@ -60,11 +93,11 @@ module.exports = function (content) {
     this.cacheable()
   }
 
-  var ast = babel.transform(content, {
+  var code = babel.transform(content, {
     plugins: [
       corePlugin
     ]
-  }).ast
+  }).code
 
-  return generate(ast).code
+  return code
 }

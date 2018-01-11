@@ -4,9 +4,13 @@
   "description": "Make your application's react routes code is more ez! :smile:",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
-  "keywords": ["imcuttle", "react-router-ez-loader", "react-router-loader"],
+  "keywords": [
+    "imcuttle",
+    "react-router-ez-loader",
+    "react-router-loader"
+  ],
   "author": "",
   "license": "MIT",
   "peerDependencies": {
@@ -15,5 +19,8 @@
   "dependencies": {
     "babel-generator": "^6.26.0",
     "babel-core": "^6.26.0"
+  },
+  "devDependencies": {
+    "jest": "^22.0.5"
   }
 }

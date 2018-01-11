@@ -1,4 +1,5 @@
 # react-router-ez-loader
+[![Build Status](https://travis-ci.org/imcuttle/react-router-ez-loader.svg?branch=master&style=flat-square)](https://travis-ci.org/imcuttle/react-router-ez-loader)
 [![NPM version](https://img.shields.io/npm/v/react-router-ez-loader.svg?style=flat-square)](https://www.npmjs.com/package/react-router-ez-loader)
 [![NPM Downloads](https://img.shields.io/npm/dm/react-router-ez-loader.svg?style=flat-square&maxAge=43200)](https://www.npmjs.com/package/react-router-ez-loader)
 
