@@ -19,7 +19,7 @@ module.exports = {
   childRoutes: [
     {
       path: 'edit',
-      component: '!some-loader!@fe/pages/Edit'
+      component: '!some-loader!@fe/pages/Edit?n=ABC'
     }
   ]
 }
@@ -27,7 +27,7 @@ module.exports = {
 
 ## Usage
 ```javascript
-const routes = require('!react-router-ez-loader!./routes')
+const routes = require('react-router-ez-loader!./routes')
 ```
 
 ## Output
@@ -48,7 +48,7 @@ module.exports = {
       getComponent: function(location, callback) {
         require.ensure([], function() {
           callback(null, require('!some-loader!@fe/pages/Edit') || require('!some-loader!@fe/pages/Edit').default)
-        }, '@fe/pages/Edit')
+        }, 'ABC')
       }
     }
   ]
